@@ -4,10 +4,11 @@
 #include <unistd.h>
 #include <signal.h>
 #include <arpa/inet.h>
+#include <time.h>
 
 int server_fd, client[2];
 char board[9] = {'1','2','3','4','5','6','7','8','9'};
-int turn = 0;
+int turn;
 
 void cleanup() {
     for(int i=0;i<2;i++) {
@@ -53,6 +54,18 @@ int main() {
     struct sockaddr_in addr;
     char buffer[1024];
     int move;
+    srand(time(NULL));
+    turn = rand()%2;
+
+    if (turn == 0) {
+    write(client[0], "You start first\n", 16);
+    write(client[1], "Opponent starts first\n", 22);
+} else {
+    write(client[1], "You start first\n", 16);
+    write(client[0], "Opponent starts first\n", 22);
+}
+
+    
 
     signal(SIGINT, sigint_handler);
 
